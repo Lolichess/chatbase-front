@@ -49,7 +49,7 @@ const ModalShared = (props: any) => {
 
   const handleClick = () => {
     copy(
-      '<iframe src="https://dazzling-eclair-81ce56.netlify.app/shared/chatbot/' +
+      '<iframe src="https://estrateiapages.com:5000/shared/chatbot/' +
         props.uid +
         '" width="100%" height="600px" frameborder="0" ></iframe>'
     );
@@ -76,7 +76,7 @@ const ModalShared = (props: any) => {
             disabled
             style={{ width: "100%", height: "60px" }}
             value={
-              '<iframe src="http://127.0.0.1:5173/shared/chatbot/' +
+              '<iframe src="https://estrateiapages.com:5000/shared/chatbot/' +
               props.uid +
               '" width="100%" height="600px" frameborder="0" ></iframe>'
             }
