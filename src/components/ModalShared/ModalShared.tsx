@@ -9,8 +9,10 @@ import {
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import ShareIcon from "@mui/icons-material/Share";
+import SettingsIcon from "@mui/icons-material/Settings";
 import React from "react";
 import copy from "copy-to-clipboard";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute" as "absolute",
@@ -36,6 +38,7 @@ const ModalShared = (props: any) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const navigate = useNavigate();
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -45,6 +48,10 @@ const ModalShared = (props: any) => {
     }
 
     setopenAlert(false);
+  };
+
+  const pushtoSetting = () => {
+    navigate("/chatbot/" + props.uid + "/settings");
   };
 
   const handleClick = () => {
@@ -59,8 +66,16 @@ const ModalShared = (props: any) => {
   return (
     <Box
       component="div"
-      sx={{ position: "absolute", right: "-40px", top: "0px" }}
+      sx={{
+        position: "absolute",
+        right: "-40px",
+        top: "0px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "12px",
+      }}
     >
+      <SettingsIcon onClick={pushtoSetting} sx={{ cursor: "pointer" }} />
       <ShareIcon onClick={handleOpen} sx={{ cursor: "pointer" }} />
       <Modal
         open={open}

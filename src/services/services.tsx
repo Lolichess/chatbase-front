@@ -33,4 +33,38 @@ const sendQuestion = async (prompt: String, urlID: Number) => {
   return await response.json();
 };
 
-export { uploadFile, sendQuestion };
+/* Get information from the file */
+
+const getInfo = async (urlID: Number) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid: urlID }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/getinfo",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
+/* Update data */
+
+const sendData = async (data: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: data }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/senddata",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
+export { uploadFile, sendQuestion, getInfo, sendData };

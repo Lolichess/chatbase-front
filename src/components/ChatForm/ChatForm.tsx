@@ -1,4 +1,4 @@
-import { Box, Input, Button } from "@mui/material";
+import { Box, Input, Button, Typography, LinearProgress } from "@mui/material";
 import React, {
   ChangeEvent,
   FormEvent,
@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { sendQuestion } from "@/services/services";
+import { sendQuestion, getInfo } from "@/services/services";
 import { ModalShared } from "../ModalShared";
 
 interface ChatSchema {
@@ -14,10 +14,20 @@ interface ChatSchema {
   type: string;
 }
 
+const SHOW_LOADING = false;
+
 const ChatForm = (props: any) => {
   const messageEl = useRef(null as any);
   const [question, setQuestion] = useState("");
   const [chat, setChat] = useState<ChatSchema[]>();
+  const [namefile, setNamefile] = useState("");
+  const [loading, setLoading] = useState(SHOW_LOADING);
+
+  const fecthdata = async () => {
+    let response = await getInfo(props.id);
+    setNamefile(response.name);
+    setChat([...(chat || []), { msg: response.msgWelcome, type: "system" }]);
+  };
 
   useEffect(() => {
     if (messageEl) {
@@ -26,6 +36,7 @@ const ChatForm = (props: any) => {
         target.scroll({ top: target.scrollHeight, behavior: "smooth" });
       });
     }
+    fecthdata();
   }, []);
 
   const handdleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +53,7 @@ const ChatForm = (props: any) => {
     setChat([...(chat || []), { msg: question, type: "user" }]);
     let questionSend = question;
     setQuestion("");
-
+    setLoading(!SHOW_LOADING);
     let response = await sendQuestion(questionSend, props.id);
 
     if (response) {
@@ -50,63 +61,87 @@ const ChatForm = (props: any) => {
         ...(prev || []),
         { msg: response.response, type: "system" },
       ]);
+      setLoading(SHOW_LOADING);
     }
   };
   return (
-    <Box
-      component="div"
-      width={800}
-      height={500}
-      marginTop={7}
-      sx={{
-        boxShadow: 0,
-        border: "1px solid #ccc",
-        borderRadius: "10px",
-        position: "relative",
-      }}
-    >
+    <Box component="div" sx={{ flexDirection: "column", alignItems: "center" }}>
+      <Typography variant="h6" marginTop={6}>
+        {namefile}
+      </Typography>
       <Box
         component="div"
-        height={400}
-        sx={{ overflowY: "auto" }}
-        ref={messageEl}
+        width={800}
+        height={500}
+        marginTop={2}
+        sx={{
+          boxShadow: 0,
+          border: "1px solid #ccc",
+          borderRadius: "10px",
+          position: "relative",
+        }}
       >
-        {chat?.map((value, index) => (
-          <Box
-            key={index}
-            component="div"
-            mx={5}
-            my={2}
-            py={2}
-            px={1}
-            width={"fit-content"}
-            maxWidth={"70%"}
-            textAlign={value.type === "user" ? "left" : "end"}
-            marginLeft={value.type !== "user" ? "auto" : "40px"}
-            sx={{ boxShadow: 3, borderRadius: "4px" }}
-          >
-            {" "}
-            {value.msg}{" "}
-          </Box>
-        ))}
+        <Box
+          component="div"
+          height={400}
+          sx={{ overflowY: "auto" }}
+          ref={messageEl}
+        >
+          {chat?.map((value, index) => (
+            <Box
+              key={index}
+              component="div"
+              mx={5}
+              my={2}
+              py={2}
+              px={1}
+              width={"fit-content"}
+              maxWidth={"70%"}
+              textAlign={value.type === "user" ? "left" : "end"}
+              marginLeft={value.type !== "user" ? "auto" : "40px"}
+              sx={{ boxShadow: 3, borderRadius: "4px" }}
+            >
+              {" "}
+              {value.msg}{" "}
+            </Box>
+          ))}
+          {loading === true ? (
+            <Box
+              component="div"
+              mx={5}
+              my={2}
+              py={2}
+              px={1}
+              width={"fit-content"}
+              maxWidth={"70%"}
+              textAlign={"end"}
+              marginLeft={"auto"}
+              sx={{ boxShadow: 3, borderRadius: "4px" }}
+            >
+              <LinearProgress sx={{ width: "120px", height: "7px" }} />
+            </Box>
+          ) : (
+            ""
+          )}
+        </Box>
+        <Box component="div">
+          <form onSubmit={handdleSubmit}>
+            <Box component="div" px={2} sx={{ display: "flex", gap: "4px" }}>
+              <Input
+                type="text"
+                placeholder="Pregunta algo..."
+                fullWidth
+                onChange={handdleInputChange}
+                value={question}
+              ></Input>
+              <Button type="submit" variant="contained">
+                Enviar
+              </Button>
+            </Box>
+          </form>
+        </Box>
+        <ModalShared uid={props.id} />
       </Box>
-      <Box component="div">
-        <form onSubmit={handdleSubmit}>
-          <Box component="div" px={2} sx={{ display: "flex", gap: "4px" }}>
-            <Input
-              type="text"
-              placeholder="Pregunta algo..."
-              fullWidth
-              onChange={handdleInputChange}
-              value={question}
-            ></Input>
-            <Button type="submit" variant="contained">
-              Enviar
-            </Button>
-          </Box>
-        </form>
-      </Box>
-      <ModalShared uid={props.id} />
     </Box>
   );
 };
