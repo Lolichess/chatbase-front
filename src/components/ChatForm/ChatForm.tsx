@@ -5,9 +5,11 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useContext,
 } from "react";
 import { sendQuestion, getInfo } from "@/services/services";
 import { ModalShared } from "../ModalShared";
+import { SigninContext } from "@/context";
 
 interface ChatSchema {
   msg: string;
@@ -23,10 +25,14 @@ const ChatForm = (props: any) => {
   const [namefile, setNamefile] = useState("");
   const [loading, setLoading] = useState(SHOW_LOADING);
 
+  const { user } = useContext(SigninContext);
+
   const fecthdata = async () => {
-    let response = await getInfo(props.id);
-    setNamefile(response.name);
-    setChat([...(chat || []), { msg: response.msgWelcome, type: "system" }]);
+    if (user) {
+      let response = await getInfo(props.id, user);
+      setNamefile(response.name);
+      setChat([...(chat || []), { msg: response.msgWelcome, type: "system" }]);
+    }
   };
 
   useEffect(() => {
@@ -36,8 +42,11 @@ const ChatForm = (props: any) => {
         target.scroll({ top: target.scrollHeight, behavior: "smooth" });
       });
     }
-    fecthdata();
   }, []);
+
+  useEffect(() => {
+    fecthdata();
+  }, [user]);
 
   const handdleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
@@ -54,7 +63,7 @@ const ChatForm = (props: any) => {
     let questionSend = question;
     setQuestion("");
     setLoading(!SHOW_LOADING);
-    let response = await sendQuestion(questionSend, props.id);
+    let response = await sendQuestion(questionSend, props.id, user);
 
     if (response) {
       setChat((prev) => [

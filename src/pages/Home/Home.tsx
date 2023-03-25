@@ -1,24 +1,37 @@
 import { Navbar } from "@/components";
 import { Button, Typography, Box, CircularProgress } from "@mui/material";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useContext } from "react";
 import { uploadFile } from "@/services/services";
 import { useNavigate } from "react-router-dom";
+import { SigninContext } from "@/context";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
 
+  const { user } = useContext(SigninContext);
+
   const navigate = useNavigate();
 
+  const handdleCLick = () => {
+    if (!user) {
+      navigate("/login");
+    }
+  };
+
   const handdleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    setLoading((prev) => !prev);
-    let file = e.target.files;
-    if (file) {
-      let response = await uploadFile(file);
-      console.log(response);
-      if (response) {
-        navigate("/chatbot/" + response);
-      }
+    if (!user) {
+      navigate("/login");
+    } else {
       setLoading((prev) => !prev);
+      let file = e.target.files;
+      console.log(user);
+      if (file) {
+        let response = await uploadFile(file, user);
+        if (response) {
+          navigate("/chatbot/" + response);
+        }
+        setLoading((prev) => !prev);
+      }
     }
   };
 
@@ -30,14 +43,23 @@ const Home = () => {
           Sube un archivo pdf para generar tu chatbot!
         </Typography>
         {!loading ? (
-          <Button component="label" variant="contained" color="primary">
+          <Button
+            component="label"
+            variant="contained"
+            color="primary"
+            onClick={handdleCLick}
+          >
             Subir
-            <input
-              type="file"
-              hidden
-              accept=".pdf"
-              onChange={handdleFileChange}
-            />
+            {user ? (
+              <input
+                type="file"
+                hidden
+                accept=".pdf"
+                onChange={handdleFileChange}
+              />
+            ) : (
+              ""
+            )}
           </Button>
         ) : (
           <CircularProgress />

@@ -5,6 +5,7 @@ specifiers:
   '@emotion/styled': ^11.10.6
   '@mui/icons-material': ^5.11.11
   '@mui/material': ^5.11.12
+  '@react-oauth/google': ^0.9.0
   '@types/node': ^18.15.1
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
@@ -21,6 +22,7 @@ dependencies:
   '@emotion/styled': 11.10.6_oouaibmszuch5k64ms7uxp2aia
   '@mui/icons-material': 5.11.11_ao76n7r2cajsoyr3cbwrn7geoi
   '@mui/material': 5.11.12_xqeqsl5kvjjtyxwyi3jhw3yuli
+  '@react-oauth/google': 0.9.0_biqbaboplfbrettd7655fr4n2y
   copy-to-clipboard: 3.3.3
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -794,6 +796,16 @@ packages:
 
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
+
+  /@react-oauth/google/0.9.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-iq9I6A4uwZezU/BixqLM6UET6an559ufC4Nh0lEIeIaKC3TJRvcPNWCjjHny56yAhgdT6ivUicLIvEoiSMjnmg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@remix-run/router/1.4.0:

@@ -1,21 +1,33 @@
+import { SigninContext } from "@/context";
 import { getInfo, sendData } from "@/services/services";
 import { Box, Button, Input, Typography, TextField, Link } from "@mui/material";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AlertModal } from "../AlertModal";
 
 const Settings = (props: any) => {
   const [msgInitial, setMsginitial] = useState("");
   const [prompt, setPrompt] = useState("");
   const [name, setName] = useState("");
+  const [openAlert, setopenAlert] = useState(false);
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
+  const { user } = useContext(SigninContext);
+
   const featchData = async () => {
-    let response = await getInfo(props.uid);
-    console.log(response);
-    setMsginitial(response.msgWelcome);
-    setName(response.name);
-    setPrompt(response.template_prompt);
+    if (user) {
+      try {
+        let response = await getInfo(props.uid, user);
+        setMsginitial(response.msgWelcome);
+        setName(response.name);
+        setPrompt(response.template_prompt);
+      } catch (error) {
+        setopenAlert(true);
+        setError(true);
+      }
+    }
   };
 
   const handdleSubmit = async (e: FormEvent) => {
@@ -26,8 +38,15 @@ const Settings = (props: any) => {
       msgWelcome: msgInitial,
       uid: props.uid,
     };
-    let response = await sendData(data);
-    console.log(response);
+    try {
+      let response = await sendData(data, user);
+      setError(false);
+      setopenAlert(true);
+    } catch (error) {
+      // TypeError: Failed to fetch
+      setopenAlert(true);
+      setError(true);
+    }
   };
 
   const pushBack = () => {
@@ -36,7 +55,7 @@ const Settings = (props: any) => {
 
   useEffect(() => {
     featchData();
-  }, []);
+  }, [user]);
   return (
     <Box component="div" sx={{ width: "800px", margin: "0 auto" }}>
       <Link
@@ -95,6 +114,12 @@ const Settings = (props: any) => {
           </Button>
         </form>
       </Box>
+      <AlertModal
+        text={error ? "Something went wrong" : "Saved!!"}
+        error={error}
+        openAlert={openAlert}
+        setopenAlert={setopenAlert}
+      />
     </Box>
   );
 };

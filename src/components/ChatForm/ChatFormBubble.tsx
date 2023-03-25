@@ -8,6 +8,7 @@ import React, {
   useContext,
 } from "react";
 import { getInfoShared, sendQuestionShared } from "@/services/services";
+import "./styled.css";
 
 const SHOW_LOADING = false;
 interface ChatSchema {
@@ -15,7 +16,7 @@ interface ChatSchema {
   type: string;
 }
 
-const ChatForm = (props: any) => {
+const ChatFormBubble = (props: any) => {
   const messageEl = useRef(null as any);
   const [question, setQuestion] = useState("");
   const [chat, setChat] = useState<ChatSchema[]>();
@@ -28,6 +29,7 @@ const ChatForm = (props: any) => {
         target.scroll({ top: target.scrollHeight, behavior: "smooth" });
       });
     }
+    document.body.classList.add("chatform");
   }, []);
 
   const handdleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,8 +70,8 @@ const ChatForm = (props: any) => {
     <Box
       component="div"
       width={"100%"}
-      height={500}
-      sx={{ boxShadow: 0, border: "1px solid #ccc", borderRadius: "10px" }}
+      height={420}
+      sx={{ boxShadow: 0, borderRadius: "10px" }}
     >
       <Box
         component="div"
@@ -134,4 +136,4 @@ const ChatForm = (props: any) => {
   );
 };
 
-export default ChatForm;
+export default ChatFormBubble;
