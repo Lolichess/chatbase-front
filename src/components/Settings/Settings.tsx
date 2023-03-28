@@ -57,7 +57,13 @@ const Settings = (props: any) => {
     featchData();
   }, [user]);
   return (
-    <Box component="div" sx={{ width: "800px", margin: "0 auto" }}>
+    <Box
+      component="div"
+      sx={{
+        width: { md: "800px", xs: "90%" },
+        margin: { md: "0 auto", xs: "30px auto" },
+      }}
+    >
       <Link
         onClick={pushBack}
         sx={{
@@ -70,7 +76,10 @@ const Settings = (props: any) => {
       >
         Back to chatbot
       </Link>
-      <Box component="div" sx={{ width: "600px", margin: "0 auto" }}>
+      <Box
+        component="div"
+        sx={{ width: { md: "600px", xs: "90%" }, margin: "0 auto" }}
+      >
         <form onSubmit={handdleSubmit}>
           <Typography align="left" variant="h6">
             Chatbot Name

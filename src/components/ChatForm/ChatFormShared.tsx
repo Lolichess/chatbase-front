@@ -69,12 +69,18 @@ const ChatForm = (props: any) => {
       component="div"
       width={"100%"}
       height={500}
-      sx={{ boxShadow: 0, border: "1px solid #ccc", borderRadius: "10px" }}
+      sx={{
+        boxShadow: 0,
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        width: { xs: "90%", md: "100%" },
+        height: { xs: "450px", md: "500px" },
+      }}
     >
       <Box
         component="div"
         height={400}
-        sx={{ overflowY: "auto" }}
+        sx={{ overflowY: "auto", height: { xs: "350px", md: "400px" } }}
         ref={messageEl}
       >
         {chat?.map((value, index) => (

@@ -38,7 +38,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Box width={600} sx={{ margin: "0 auto" }}>
+      <Box width={600} sx={{ margin: "0 auto", width: { xs: "100%" } }}>
         <Typography variant="h3" fontSize={24} py={3}>
           Sube un archivo pdf para generar tu chatbot!
         </Typography>

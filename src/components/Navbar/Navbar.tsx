@@ -73,7 +73,10 @@ const Navbar = () => {
                       <ListItemButton
                         sx={{ textAlign: "center", width: "auto" }}
                       >
-                        <ListItemText primary={item.name} />
+                        <ListItemText
+                          sx={{ fontSize: { xs: "14px" } }}
+                          primary={item.name}
+                        />
                       </ListItemButton>
                     </ListItem>
                   ))
@@ -85,7 +88,10 @@ const Navbar = () => {
                       onClick={() => pushTopage(item.url)}
                     >
                       <ListItemButton sx={{ textAlign: "center" }}>
-                        <ListItemText primary={item.name} />
+                        <ListItemText
+                          sx={{ fontSize: { xs: "14px" } }}
+                          primary={item.name}
+                        />
                       </ListItemButton>
                     </ListItem>
                   ))}

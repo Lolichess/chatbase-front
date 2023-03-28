@@ -74,7 +74,14 @@ const ChatForm = (props: any) => {
     }
   };
   return (
-    <Box component="div" sx={{ flexDirection: "column", alignItems: "center" }}>
+    <Box
+      component="div"
+      sx={{
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: { xs: "0px" },
+      }}
+    >
       <Typography variant="h6" marginTop={6}>
         {namefile}
       </Typography>
@@ -88,12 +95,14 @@ const ChatForm = (props: any) => {
           border: "1px solid #ccc",
           borderRadius: "10px",
           position: "relative",
+          width: { xs: "90%", md: "800px" },
+          height: { xs: "450px", md: "500px" },
         }}
       >
         <Box
           component="div"
           height={400}
-          sx={{ overflowY: "auto" }}
+          sx={{ overflowY: "auto", height: { xs: "350px", md: "400px" } }}
           ref={messageEl}
         >
           {chat?.map((value, index) => (

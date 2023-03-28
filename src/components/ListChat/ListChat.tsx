@@ -34,10 +34,10 @@ const ListChat = () => {
           display: "flex",
           justifyContent: "center",
           gap: "30px",
-          width: "720px",
+          width: { sm: "720px", xs: "100%" },
           margin: "0 auto",
           flexWrap: "wrap",
-          marginTop: "45px",
+          marginTop: { md: "45px", xs: "80px" },
         }}
       >
         {listChatFile.map((data: any, index) => (
