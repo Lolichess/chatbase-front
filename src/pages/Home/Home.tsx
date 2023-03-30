@@ -1,12 +1,21 @@
 import { Navbar } from "@/components";
-import { Button, Typography, Box, CircularProgress } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Box,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import React, { useState, ChangeEvent, useContext } from "react";
-import { uploadFile } from "@/services/services";
+import { uploadFile, scrapperWeb } from "@/services/services";
 import { useNavigate } from "react-router-dom";
 import { SigninContext } from "@/context";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
+  const [showPageScrapper, setShowPageScrapper] = useState(false);
+  const [url, setUrl] = useState("");
 
   const { user } = useContext(SigninContext);
 
@@ -35,36 +44,102 @@ const Home = () => {
     }
   };
 
+  const handdleCLickUrl = () => {
+    setShowPageScrapper((prev) => !prev);
+  };
+
+  const handdleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (!user) {
+      navigate("/login");
+    } else {
+      setLoading((prev) => !prev);
+      if (url !== "") {
+        let response = await scrapperWeb(url, user);
+        if (response) {
+          navigate("/chatbot/" + response);
+        }
+        setLoading((prev) => !prev);
+      }
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <Box width={600} sx={{ margin: "0 auto", width: { xs: "100%" } }}>
-        <Typography variant="h3" fontSize={24} py={3}>
-          Sube un archivo pdf para generar tu chatbot!
-        </Typography>
-        {!loading ? (
-          <Button
-            component="label"
-            variant="contained"
-            color="primary"
-            onClick={handdleCLick}
-          >
-            Subir
-            {user ? (
-              <input
-                type="file"
-                hidden
-                accept=".pdf"
-                onChange={handdleFileChange}
-              />
+      {!showPageScrapper ? (
+        <Box width={600} sx={{ margin: "0 auto", width: { xs: "100%" } }}>
+          <Typography variant="h3" fontSize={24} py={3}>
+            Sube un archivo pdf para generar tu chatbot!
+          </Typography>
+          <Box sx={{ display: "flex", gap: "20px", justifyContent: "center" }}>
+            {!loading ? (
+              <Button
+                component="label"
+                variant="contained"
+                color="primary"
+                onClick={handdleCLick}
+              >
+                Upload PDF
+                {user ? (
+                  <input
+                    type="file"
+                    hidden
+                    accept=".pdf"
+                    onChange={handdleFileChange}
+                  />
+                ) : (
+                  ""
+                )}
+              </Button>
             ) : (
-              ""
+              <CircularProgress />
             )}
+            <Button
+              component="label"
+              variant="contained"
+              color="primary"
+              onClick={handdleCLickUrl}
+            >
+              URL
+            </Button>
+          </Box>
+        </Box>
+      ) : !loading ? (
+        <Box sx={{ width: { md: "400px", xs: "100%" }, margin: "0 auto" }}>
+          <Button
+            sx={{
+              color: "#000",
+              margin: "20px 0px",
+              display: "flex",
+              padding: "0px",
+            }}
+            onClick={handdleCLickUrl}
+          >
+            <ArrowBackIcon />
+            Regresar
           </Button>
-        ) : (
-          <CircularProgress />
-        )}
-      </Box>
+          <form onSubmit={handdleSubmit}>
+            <Typography sx={{ textAlign: "left" }}>URL</Typography>
+            <TextField
+              fullWidth
+              placeholder="https://www.google.com/"
+              value={url}
+              onChange={(event) => setUrl(event?.target.value)}
+            />
+            <Button
+              fullWidth
+              sx={{ display: "flex", margin: "20px 0px" }}
+              variant="contained"
+              type="submit"
+            >
+              Enviar
+            </Button>
+          </form>
+        </Box>
+      ) : (
+        <CircularProgress />
+      )}
     </>
   );
 };

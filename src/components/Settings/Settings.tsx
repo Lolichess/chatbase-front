@@ -103,6 +103,7 @@ const Settings = (props: any) => {
             fullWidth
             onChange={(e) => setMsginitial(e.target.value)}
           />
+          {/*
           <Typography variant="h6" align="left">
             Template prompt
           </Typography>
@@ -116,7 +117,7 @@ const Settings = (props: any) => {
             multiline
             rows={6}
             maxRows={6}
-          />
+      />*/}
           <Button variant="contained" type="submit" fullWidth>
             {" "}
             Save

@@ -17,6 +17,24 @@ const uploadFile = async (file: FileList, user: any) => {
   return await response.json();
 };
 
+const scrapperWeb = async (url: String, user: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      url: url,
+      user: user,
+    }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/scrapperweb",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 /* Upload  */
 
 const sendQuestionShared = async (prompt: String, urlID: Number) => {
@@ -128,4 +146,5 @@ export {
   sendQuestionShared,
   getInfoShared,
   getListChat,
+  scrapperWeb,
 };

@@ -10,6 +10,7 @@ import React, {
 import { sendQuestion, getInfo } from "@/services/services";
 import { ModalShared } from "../ModalShared";
 import { SigninContext } from "@/context";
+import { TypeAnimation } from "react-type-animation";
 
 interface ChatSchema {
   msg: string;
@@ -119,8 +120,19 @@ const ChatForm = (props: any) => {
               marginLeft={value.type !== "user" ? "auto" : "40px"}
               sx={{ boxShadow: 3, borderRadius: "4px" }}
             >
-              {" "}
-              {value.msg}{" "}
+              {value.type !== "user" && index !== 0 ? (
+                <TypeAnimation
+                  sequence={[
+                    value.msg, // Types 'One'
+                    1000,
+                  ]}
+                  wrapper="span"
+                  cursor={false}
+                  style={{ fontSize: "1em", display: "inline-block" }}
+                />
+              ) : (
+                value.msg
+              )}
             </Box>
           ))}
           {loading === true ? (
