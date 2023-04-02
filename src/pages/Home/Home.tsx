@@ -151,7 +151,7 @@ const Home = () => {
               }}
             >
               {" "}
-              La WEB solo extraera un maximo de 5 URL{" "}
+              La WEB solo extraera un maximo de 10 URL{" "}
             </Typography>
             <Button
               fullWidth
