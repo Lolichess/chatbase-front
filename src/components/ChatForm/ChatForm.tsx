@@ -124,7 +124,7 @@ const ChatForm = (props: any) => {
                 <TypeAnimation
                   sequence={[
                     value.msg, // Types 'One'
-                    1000,
+                    100,
                   ]}
                   wrapper="span"
                   cursor={false}

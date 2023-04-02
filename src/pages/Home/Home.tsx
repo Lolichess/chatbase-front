@@ -11,11 +11,13 @@ import { uploadFile, scrapperWeb } from "@/services/services";
 import { useNavigate } from "react-router-dom";
 import { SigninContext } from "@/context";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { AlertModal } from "@/components/AlertModal";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showPageScrapper, setShowPageScrapper] = useState(false);
   const [url, setUrl] = useState("");
+  const [openAlert, setopenAlert] = useState(false);
 
   const { user } = useContext(SigninContext);
 
@@ -48,17 +50,29 @@ const Home = () => {
     setShowPageScrapper((prev) => !prev);
   };
 
+  const validateWeb = (webUrl: string) => {
+    try {
+      const miUrl = new URL(webUrl);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handdleSubmit = async (e: any) => {
     e.preventDefault();
     if (!user) {
       navigate("/login");
     } else {
       setLoading((prev) => !prev);
-      if (url !== "") {
+      if (url !== "" && validateWeb(url)) {
         let response = await scrapperWeb(url, user);
         if (response) {
           navigate("/chatbot/" + response);
         }
+        setLoading((prev) => !prev);
+      } else {
+        setopenAlert(true);
         setLoading((prev) => !prev);
       }
     }
@@ -69,8 +83,8 @@ const Home = () => {
       <Navbar />
       {!showPageScrapper ? (
         <Box width={600} sx={{ margin: "0 auto", width: { xs: "100%" } }}>
-          <Typography variant="h3" fontSize={24} py={3}>
-            Sube un archivo pdf para generar tu chatbot!
+          <Typography variant="h1" fontSize={28} py={3}>
+            Entrena a ChatGPT con sus datos y agréguelo a su sitio web
           </Typography>
           <Box sx={{ display: "flex", gap: "20px", justifyContent: "center" }}>
             {!loading ? (
@@ -127,6 +141,18 @@ const Home = () => {
               value={url}
               onChange={(event) => setUrl(event?.target.value)}
             />
+            <Typography
+              component="p"
+              sx={{
+                textAlign: "left",
+                color: "#ccc",
+                fontSize: "12px",
+                margin: "5px 0px",
+              }}
+            >
+              {" "}
+              La WEB solo extraera un maximo de 5 URL{" "}
+            </Typography>
             <Button
               fullWidth
               sx={{ display: "flex", margin: "20px 0px" }}
@@ -140,6 +166,12 @@ const Home = () => {
       ) : (
         <CircularProgress />
       )}
+      <AlertModal
+        text={"Error url incorrecto"}
+        error={true}
+        openAlert={openAlert}
+        setopenAlert={setopenAlert}
+      />
     </>
   );
 };
