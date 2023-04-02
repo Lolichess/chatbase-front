@@ -120,19 +120,7 @@ const ChatForm = (props: any) => {
               marginLeft={value.type !== "user" ? "auto" : "40px"}
               sx={{ boxShadow: 3, borderRadius: "4px" }}
             >
-              {value.type !== "user" && index !== 0 ? (
-                <TypeAnimation
-                  sequence={[
-                    value.msg, // Types 'One'
-                    100,
-                  ]}
-                  wrapper="span"
-                  cursor={false}
-                  style={{ fontSize: "1em", display: "inline-block" }}
-                />
-              ) : (
-                value.msg
-              )}
+              {value.msg}
             </Box>
           ))}
           {loading === true ? (
