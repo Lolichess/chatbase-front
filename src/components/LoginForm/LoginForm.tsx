@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { SigninContext } from "@/context";
 import GoogleIcon from "@mui/icons-material/Google";
+import { loginUser } from "@/services/services";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const LoginForm = () => {
   const responseMessage = (response: CredentialResponse) => {
     localStorage.setItem("user", JSON.stringify(response));
     setUser(JSON.stringify(response));
+    loginUser(JSON.stringify(response));
     navigate("/");
   };
 

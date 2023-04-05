@@ -6,6 +6,7 @@ specifiers:
   '@mui/icons-material': ^5.11.11
   '@mui/material': ^5.11.12
   '@react-oauth/google': ^0.9.0
+  '@stripe/stripe-js': ^1.52.0
   '@types/node': ^18.15.1
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
@@ -24,6 +25,7 @@ dependencies:
   '@mui/icons-material': 5.11.11_ao76n7r2cajsoyr3cbwrn7geoi
   '@mui/material': 5.11.12_xqeqsl5kvjjtyxwyi3jhw3yuli
   '@react-oauth/google': 0.9.0_biqbaboplfbrettd7655fr4n2y
+  '@stripe/stripe-js': 1.52.0
   copy-to-clipboard: 3.3.3
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -813,6 +815,10 @@ packages:
   /@remix-run/router/1.4.0:
     resolution: {integrity: sha512-BJ9SxXux8zAg991UmT8slpwpsd31K1dHHbD3Ba4VzD+liLQ4WAMSxQp2d2ZPRPfN0jN2NPRowcSSoM7lCaF08Q==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@stripe/stripe-js/1.52.0:
+    resolution: {integrity: sha512-Ja2VlaTf3kM5tN4Y0sC8T3ibZAnfGUU/QzMAlk/G+Adz2fF1ycTabtSkdSuVP4/adXox8NkPPV4Xndx/EP4fMg==}
     dev: false
 
   /@types/node/18.15.1:

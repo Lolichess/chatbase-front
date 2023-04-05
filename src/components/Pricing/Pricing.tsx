@@ -14,6 +14,10 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
+import { SigninContext } from "@/context";
+import { createSessionStripe } from "@/services/services";
+import { useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
 
 function Copyright(props: any) {
   return (
@@ -58,6 +62,7 @@ const tiers = [
     ],
     buttonText: "Get started",
     buttonVariant: "contained",
+    pricing: "price_1Mt29eEBmXtipPelVd7Z2XiA",
   },
   {
     title: "Enterprise",
@@ -70,6 +75,7 @@ const tiers = [
     ],
     buttonText: "Contact us",
     buttonVariant: "outlined",
+    pricing: "price_1Mt29eEBmXtipPelZVYwYcAj",
   },
 ];
 const footers = [
@@ -103,6 +109,27 @@ const footers = [
 ];
 
 function PricingContent() {
+  const { user } = React.useContext(SigninContext);
+
+  const navigate = useNavigate();
+
+  const createSession = async (price_id: any) => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      const stripe = await loadStripe(
+        "pk_test_51MpU22EBmXtipPelpPCnezqHvWs9qDVZn72zLY01MrD7RXENHiXSpcnjbE3d8VMiIrLVs8qYTfcnomIxVzesi21i00WgcDuGvo"
+      );
+      let response = await createSessionStripe(price_id, user);
+
+      if (response.session_id) {
+        const result = await stripe.redirectToCheckout({
+          sessionId: response.session_id,
+        });
+      }
+    }
+  };
+
   return (
     <React.Fragment>
       <GlobalStyles
@@ -197,6 +224,7 @@ function PricingContent() {
                   <Button
                     fullWidth
                     variant={tier.buttonVariant as "outlined" | "contained"}
+                    onClick={() => createSession(tier.pricing)}
                   >
                     {tier.buttonText}
                   </Button>

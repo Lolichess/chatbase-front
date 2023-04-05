@@ -91,6 +91,21 @@ const getInfo = async (urlID: Number, user: any) => {
   return await response.json();
 };
 
+const loginUser = async (user: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user: user }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/login",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 const getInfoShared = async (urlID: Number) => {
   let requestOptions = {
     method: "POST",
@@ -138,6 +153,23 @@ const sendData = async (data: any, user: any) => {
   return await response.json();
 };
 
+/* Create a session stripe */
+
+const createSessionStripe = async (priceID: any, user: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ price_id: priceID, user: user }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/create-checkout-session",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 export {
   uploadFile,
   sendQuestion,
@@ -147,4 +179,6 @@ export {
   getInfoShared,
   getListChat,
   scrapperWeb,
+  createSessionStripe,
+  loginUser,
 };
