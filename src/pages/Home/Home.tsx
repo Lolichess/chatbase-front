@@ -18,7 +18,8 @@ const Home = () => {
   const [showPageScrapper, setShowPageScrapper] = useState(false);
   const [url, setUrl] = useState("");
   const [openAlert, setopenAlert] = useState(false);
-
+  const [error, setError] = useState(false);
+  const [msg, setMsg] = useState("Error url incorrecto");
   const { user } = useContext(SigninContext);
 
   const navigate = useNavigate();
@@ -35,11 +36,16 @@ const Home = () => {
     } else {
       setLoading((prev) => !prev);
       let file = e.target.files;
-      console.log(user);
       if (file) {
         let response = await uploadFile(file, user);
         if (response) {
-          navigate("/chatbot/" + response);
+          if (response.value == "InvalidPlan") {
+            setMsg("Ha alcanzado el numero maximo de Chatbot");
+            setError(true);
+            setopenAlert(true);
+          } else {
+            navigate("/chatbot/" + response.value);
+          }
         }
         setLoading((prev) => !prev);
       }
@@ -60,6 +66,7 @@ const Home = () => {
   };
 
   const handdleSubmit = async (e: any) => {
+    setError(false);
     e.preventDefault();
     if (!user) {
       navigate("/login");
@@ -68,10 +75,18 @@ const Home = () => {
       if (url !== "" && validateWeb(url)) {
         let response = await scrapperWeb(url, user);
         if (response) {
-          navigate("/chatbot/" + response);
+          if (response.value == "InvalidPlan") {
+            setMsg("Ha alcanzado el numero maximo de Chatbot");
+            setError(true);
+            setopenAlert(true);
+          } else {
+            navigate("/chatbot/" + response.value);
+          }
+          setLoading((prev) => !prev);
         }
-        setLoading((prev) => !prev);
       } else {
+        setError(true);
+        setMsg("Error url incorrecto");
         setopenAlert(true);
         setLoading((prev) => !prev);
       }
@@ -84,7 +99,7 @@ const Home = () => {
       {!showPageScrapper ? (
         <Box width={600} sx={{ margin: "0 auto", width: { xs: "100%" } }}>
           <Typography variant="h1" fontSize={28} py={3}>
-            Entrena a ChatGPT con sus datos y agréguelo a su sitio web
+            Entrena a ChatGPT con tus datos y agrégalo a tu sitio web
           </Typography>
           <Box sx={{ display: "flex", gap: "20px", justifyContent: "center" }}>
             {!loading ? (
@@ -167,8 +182,8 @@ const Home = () => {
         <CircularProgress />
       )}
       <AlertModal
-        text={"Error url incorrecto"}
-        error={true}
+        text={msg}
+        error={error}
         openAlert={openAlert}
         setopenAlert={setopenAlert}
       />

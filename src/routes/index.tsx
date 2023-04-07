@@ -7,6 +7,8 @@ import { AccountSetting } from "@/pages/AccountSetting";
 import ChatbotBubble from "@/pages/Chatbot/ChatbotBubble";
 import { MyChatbots } from "@/pages/MyChatbots";
 import PricingPage from "@/pages/PricingPage/PricingPage";
+import SucessPayment from "@/pages/Payment/SucessPayment";
+import CancelPayment from "@/pages/Payment/CancelPayment";
 
 const Router = () => {
   return (
@@ -21,6 +23,8 @@ const Router = () => {
         <Route path="/settings" element={<AccountSetting />} />
         <Route path="/my-chatbots" element={<MyChatbots />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/success" element={<SucessPayment />} />
+        <Route path="/error" element={<CancelPayment />} />
       </Routes>
     </BrowserRouter>
   );

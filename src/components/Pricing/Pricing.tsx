@@ -45,7 +45,6 @@ const tiers = [
       "30 messages/month",
       "1 chatbot",
       "400,000 characteres/chatbot",
-      "Embed on website",
     ],
     buttonText: "Sign up for free",
     buttonVariant: "outlined",
@@ -65,46 +64,15 @@ const tiers = [
     pricing: "price_1Mt29eEBmXtipPelVd7Z2XiA",
   },
   {
-    title: "Enterprise",
-    price: "50",
+    title: "Servicios",
+    price: "",
     description: [
-      "5,000 messages/month",
-      "20 chatbot",
-      "4,000,000 characteres/chatbot",
-      "Embed on website",
+      "Optimización de documentación",
+      "Servicios personalizados",
+      "Chat personalizado",
     ],
     buttonText: "Contact us",
     buttonVariant: "outlined",
-    pricing: "price_1Mt29eEBmXtipPelZVYwYcAj",
-  },
-];
-const footers = [
-  {
-    title: "Company",
-    description: ["Team", "History", "Contact us", "Locations"],
-  },
-  {
-    title: "Features",
-    description: [
-      "Cool stuff",
-      "Random feature",
-      "Team feature",
-      "Developer stuff",
-      "Another one",
-    ],
-  },
-  {
-    title: "Resources",
-    description: [
-      "Resource",
-      "Resource name",
-      "Another resource",
-      "Final resource",
-    ],
-  },
-  {
-    title: "Legal",
-    description: ["Privacy policy", "Terms of use"],
   },
 ];
 
@@ -113,6 +81,9 @@ function PricingContent() {
 
   const navigate = useNavigate();
 
+  const pushToContact = () => {
+    window.location.href = "https://www.doc2chat.com/contacto";
+  };
   const createSession = async (price_id: any) => {
     if (!user) {
       navigate("/login");
@@ -224,7 +195,11 @@ function PricingContent() {
                   <Button
                     fullWidth
                     variant={tier.buttonVariant as "outlined" | "contained"}
-                    onClick={() => createSession(tier.pricing)}
+                    onClick={
+                      tier.pricing
+                        ? () => createSession(tier.pricing)
+                        : pushToContact
+                    }
                   >
                     {tier.buttonText}
                   </Button>

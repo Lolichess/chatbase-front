@@ -170,6 +170,38 @@ const createSessionStripe = async (priceID: any, user: any) => {
   return await response.json();
 };
 
+/* remove chatbot */
+
+const removeChatbot = async (chatbotID: any, user: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chatbotID: chatbotID, user: user }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/remove-chatbot",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
+const getUser = async (user: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user: user }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/getuser",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 export {
   uploadFile,
   sendQuestion,
@@ -181,4 +213,6 @@ export {
   scrapperWeb,
   createSessionStripe,
   loginUser,
+  removeChatbot,
+  getUser,
 };

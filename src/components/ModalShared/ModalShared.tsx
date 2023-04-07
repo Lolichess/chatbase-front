@@ -10,10 +10,13 @@ import {
 import MuiAlert from "@mui/material/Alert";
 import ShareIcon from "@mui/icons-material/Share";
 import SettingsIcon from "@mui/icons-material/Settings";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import copy from "copy-to-clipboard";
 import { useNavigate } from "react-router-dom";
 import { AlertModal } from "../AlertModal";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { SigninContext } from "@/context";
+import { getUser, removeChatbot } from "@/services/services";
 
 const style = {
   position: "absolute" as "absolute",
@@ -35,9 +38,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const ModalShared = (props: any) => {
   const [open, setOpen] = React.useState(false);
+  const [openRemove, setOpenRemove] = React.useState(false);
+  const [openRestrictionModal, setOpenRestrictionModal] = React.useState(false);
   const [openAlert, setopenAlert] = React.useState(false);
+  const [error, setError] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpenRemove = () => setOpenRemove(true);
+  const handleCloseRemove = () => setOpenRemove(false);
+
+  const handleOpenRestrictionModal = () => setOpenRestrictionModal(true);
+  const handleCloseRestrictionModal = () => setOpenRestrictionModal(false);
+
+  const [showEmbed, setShowEmbed] = useState(false);
+  const [msgText, setMsgtext] = useState("Copied!!");
+
+  const { user } = useContext(SigninContext);
 
   const navigate = useNavigate();
 
@@ -46,6 +62,8 @@ const ModalShared = (props: any) => {
   };
 
   const handleClick = () => {
+    setError(false);
+    setMsgtext("Copied!!");
     copy(
       '<iframe src="' +
         import.meta.env.VITE_SERVER +
@@ -57,6 +75,8 @@ const ModalShared = (props: any) => {
   };
 
   const handleClickBubble = () => {
+    setError(false);
+    setMsgtext("Copied!!");
     copy(
       '<script  src="' +
         import.meta.env.VITE_BUBBLE +
@@ -65,6 +85,45 @@ const ModalShared = (props: any) => {
         '" ></script>'
     );
     setopenAlert(true);
+  };
+
+  const openRestriction = () => {
+    if (!showEmbed) {
+      handleOpenRestrictionModal();
+    } else {
+      handleOpen();
+    }
+  };
+
+  const pushtoPricing = () => {
+    navigate("/pricing");
+  };
+
+  const getUserPrivilgios = async () => {
+    let response = await getUser(user);
+
+    let data = JSON.parse(response);
+    if (response) {
+      setShowEmbed(data.type !== "free" ? true : false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      getUserPrivilgios();
+    }
+  }, [user]);
+
+  const handleClickRemove = async () => {
+    let response = await removeChatbot(props.uid, user);
+
+    if (response.status) {
+      navigate("/my-chatbots");
+    } else {
+      setMsgtext("Error de conexion");
+      setError(true);
+      handleClose();
+    }
   };
 
   return (
@@ -80,7 +139,8 @@ const ModalShared = (props: any) => {
       }}
     >
       <SettingsIcon onClick={pushtoSetting} sx={{ cursor: "pointer" }} />
-      <ShareIcon onClick={handleOpen} sx={{ cursor: "pointer" }} />
+      <ShareIcon onClick={openRestriction} sx={{ cursor: "pointer" }} />
+      <DeleteIcon onClick={handleOpenRemove} sx={{ cursor: "pointer" }} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -140,10 +200,67 @@ const ModalShared = (props: any) => {
           </Button>
         </Box>
       </Modal>
+      <Modal
+        open={openRemove}
+        onClose={handleCloseRemove}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{}}
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h4" component="h6">
+            Realmente desea eliminar el chatbot ?
+          </Typography>
+
+          <Button
+            sx={{ width: "100%", margin: "10px 0px" }}
+            variant="contained"
+            onClick={handleClickRemove}
+          >
+            Si
+          </Button>
+          <Button
+            sx={{ width: "100%" }}
+            variant="contained"
+            onClick={handleCloseRemove}
+          >
+            Cancelar
+          </Button>
+        </Box>
+      </Modal>
+      <Modal
+        open={openRestrictionModal}
+        onClose={handleCloseRestrictionModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{}}
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h4" component="h6">
+            Necesita actualizar su plan para usar este servicio
+          </Typography>
+
+          <Button
+            sx={{ width: "100%", margin: "10px 0px" }}
+            variant="contained"
+            onClick={pushtoPricing}
+          >
+            Click to Pricing
+          </Button>
+          <Button
+            sx={{ width: "100%" }}
+            variant="contained"
+            onClick={handleCloseRestrictionModal}
+          >
+            Cerrar
+          </Button>
+        </Box>
+      </Modal>
       <AlertModal
-        text={"Copied!!"}
+        text={msgText}
         openAlert={openAlert}
         setopenAlert={setopenAlert}
+        error={error}
       />
     </Box>
   );

@@ -4,7 +4,7 @@ import { SigninContext } from "./context";
 import Router from "./routes";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null || "");
 
   useEffect(() => {
     let user = localStorage.getItem("user");

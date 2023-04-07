@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 export type GlobalContent = {
   user: string | null;
-  setUser: (c: string | null) => void;
+  setUser: (value: string | null) => void;
 };
 
 export const SigninContext = createContext<GlobalContent>({
