@@ -7,27 +7,27 @@ import { getUser } from "@/services/services";
 
 const tiers = [
   {
-    title: "Free",
+    title: "Gratis",
     price: "0",
     description: [
-      "30 messages/month",
+      "30 mensajes/mensual",
       "1 chatbot",
-      "400,000 characteres/chatbot",
+      "400,000 caracteres/chatbot",
     ],
-    buttonText: "Sign up for free",
+    buttonText: "Entra",
     buttonVariant: "outlined",
   },
   {
-    title: "Hobby",
-    subheader: "Most popular",
+    title: "Basico",
+    subheader: "Mas popular",
     price: "10",
     description: [
-      "1,000 messages/month",
+      "1,000 mensajes/mensual",
       "10 chatbot",
-      "2,000,000 characteres/chatbot",
-      "Embed on website",
+      "2,000,000 caracteres/chatbot",
+      "Embed en sitio web",
     ],
-    buttonText: "Get started",
+    buttonText: "Comienza ahora",
     buttonVariant: "contained",
     pricing: "price_1Mt29eEBmXtipPelVd7Z2XiA",
   },
@@ -39,7 +39,7 @@ const tiers = [
       "Servicios personalizados",
       "Chat personalizado",
     ],
-    buttonText: "Contact us",
+    buttonText: "Contacta con nosotros",
     buttonVariant: "outlined",
   },
 ];
@@ -62,10 +62,10 @@ const SettingsAccount = () => {
       let data = JSON.parse(response);
       setPlan(
         data.type == "free"
-          ? "Free"
+          ? "Gratis"
           : data.type === "pro"
           ? "Servicios"
-          : "Hobby"
+          : "Basico"
       );
     }
   };
@@ -81,15 +81,15 @@ const SettingsAccount = () => {
       <Box
         component="div"
         sx={{
-          width: "600px",
+          width: { xs: "100%", md: "600px" },
           margin: "20px auto",
         }}
       >
-        <Typography variant="h4">Current Plant: {plan} </Typography>
+        <Typography variant="h4">Plan actual: {plan} </Typography>
         <Box
           component="div"
           sx={{
-            width: "600px",
+            width: { xs: "100%", md: "600px" },
             margin: "20px auto",
             borderRadius: "10px",
             border: "1px solid #ccc",
@@ -135,7 +135,7 @@ const SettingsAccount = () => {
         sx={{ backgroundColor: "#000" }}
         onClick={logoutUser}
       >
-        Logout
+        Cerrar Sesion
       </Button>
     </>
   );

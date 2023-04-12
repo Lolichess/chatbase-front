@@ -16,26 +16,26 @@ import { useNavigate } from "react-router-dom";
 
 const navItems = [
   {
-    name: "Home",
+    name: "Inicio",
     url: "/",
   },
   {
-    name: "Pricing",
+    name: "Planes",
     url: "/pricing",
   },
 ];
 
 const navItemsLogin = [
   {
-    name: "Home",
+    name: "Inicio",
     url: "/",
   },
   {
-    name: "Pricing",
+    name: "Planes",
     url: "/pricing",
   },
   {
-    name: "My chatbots",
+    name: "Mis chatbots",
     url: "/my-chatbots",
   },
 ];
@@ -103,7 +103,7 @@ const Navbar = () => {
               onClick={pushToSettingsUser}
               sx={{ marginLeft: "auto" }}
             >
-              Account
+              Cuenta
             </Button>
           ) : (
             <Button
@@ -111,7 +111,7 @@ const Navbar = () => {
               onClick={pushToLogin}
               sx={{ marginLeft: "auto" }}
             >
-              Login
+              Entrar
             </Button>
           )}
         </Toolbar>

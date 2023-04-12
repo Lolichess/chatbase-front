@@ -39,27 +39,27 @@ function Copyright(props: any) {
 
 const tiers = [
   {
-    title: "Free",
+    title: "Gratis",
     price: "0",
     description: [
-      "30 messages/month",
+      "30 mensajes/mensual",
       "1 chatbot",
-      "400,000 characteres/chatbot",
+      "400,000 caracteres/chatbot",
     ],
-    buttonText: "Sign up for free",
+    buttonText: "Entra",
     buttonVariant: "outlined",
   },
   {
-    title: "Hobby",
-    subheader: "Most popular",
+    title: "Basico",
+    subheader: "Mas popular",
     price: "10",
     description: [
-      "1,000 messages/month",
+      "1,000 mensajes/mensual",
       "10 chatbot",
-      "2,000,000 characteres/chatbot",
-      "Embed on website",
+      "2,000,000 caracteres/chatbot",
+      "Embed en sitio web",
     ],
-    buttonText: "Get started",
+    buttonText: "Comienza ahora",
     buttonVariant: "contained",
     pricing: "price_1Mt29eEBmXtipPelVd7Z2XiA",
   },
@@ -71,7 +71,7 @@ const tiers = [
       "Servicios personalizados",
       "Chat personalizado",
     ],
-    buttonText: "Contact us",
+    buttonText: "Contacta con nosotros",
     buttonVariant: "outlined",
   },
 ];
@@ -83,6 +83,14 @@ function PricingContent() {
 
   const pushToContact = () => {
     window.location.href = "https://www.doc2chat.com/contacto";
+  };
+
+  const pushToLogin = () => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      navigate("/");
+    }
   };
   const createSession = async (price_id: any) => {
     if (!user) {
@@ -121,7 +129,7 @@ function PricingContent() {
           color="text.primary"
           gutterBottom
         >
-          Pricing
+          Planes
         </Typography>
         <Typography
           variant="h5"
@@ -198,6 +206,8 @@ function PricingContent() {
                     onClick={
                       tier.pricing
                         ? () => createSession(tier.pricing)
+                        : tier.price === "0"
+                        ? pushToLogin
                         : pushToContact
                     }
                   >

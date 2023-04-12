@@ -11,6 +11,7 @@ import { sendQuestion, getInfo } from "@/services/services";
 import { ModalShared } from "../ModalShared";
 import { SigninContext } from "@/context";
 import { TypeAnimation } from "react-type-animation";
+import { useNavigate } from "react-router-dom";
 
 interface ChatSchema {
   msg: string;
@@ -27,6 +28,8 @@ const ChatForm = (props: any) => {
   const [loading, setLoading] = useState(SHOW_LOADING);
 
   const { user } = useContext(SigninContext);
+
+  const navigate = useNavigate();
 
   const fecthdata = async () => {
     if (user) {
@@ -48,6 +51,10 @@ const ChatForm = (props: any) => {
   useEffect(() => {
     fecthdata();
   }, [user]);
+
+  const pushtoHome = () => {
+    navigate("/");
+  };
 
   const handdleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
@@ -75,91 +82,115 @@ const ChatForm = (props: any) => {
     }
   };
   return (
-    <Box
-      component="div"
-      sx={{
-        flexDirection: "column",
-        alignItems: "center",
-        marginTop: { xs: "0px" },
-      }}
-    >
-      <Typography variant="h6" marginTop={6}>
-        {namefile}
-      </Typography>
+    <Box component="div" sx={{ position: "relative" }}>
       <Box
         component="div"
-        width={800}
-        height={500}
-        marginTop={2}
         sx={{
-          boxShadow: 0,
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-          position: "relative",
-          width: { xs: "90%", md: "800px" },
-          height: { xs: "450px", md: "500px" },
+          flexDirection: "column",
+          alignItems: "center",
+          marginTop: { xs: "60px" },
         }}
       >
+        <Typography
+          variant="h6"
+          marginTop={6}
+          sx={{
+            width: { xs: "270px", md: "100%" },
+            textOverflow: { xs: "ellipsis" },
+            whiteSpace: { xs: "nowrap" },
+            overflow: { xs: "hidden" },
+          }}
+        >
+          {namefile}
+        </Typography>
         <Box
           component="div"
-          height={400}
-          sx={{ overflowY: "auto", height: { xs: "350px", md: "400px" } }}
-          ref={messageEl}
+          width={800}
+          height={500}
+          marginTop={2}
+          sx={{
+            boxShadow: 0,
+            border: "1px solid #ccc",
+            borderRadius: "10px",
+            position: "relative",
+            width: { xs: "90%", md: "800px" },
+            height: { xs: "450px", md: "500px" },
+          }}
         >
-          {chat?.map((value, index) => (
-            <Box
-              key={index}
-              component="div"
-              mx={5}
-              my={2}
-              py={2}
-              px={1}
-              width={"fit-content"}
-              maxWidth={"70%"}
-              textAlign={value.type === "user" ? "left" : "end"}
-              marginLeft={value.type !== "user" ? "auto" : "40px"}
-              sx={{ boxShadow: 3, borderRadius: "4px" }}
-            >
-              {value.msg}
-            </Box>
-          ))}
-          {loading === true ? (
-            <Box
-              component="div"
-              mx={5}
-              my={2}
-              py={2}
-              px={1}
-              width={"fit-content"}
-              maxWidth={"70%"}
-              textAlign={"end"}
-              marginLeft={"auto"}
-              sx={{ boxShadow: 3, borderRadius: "4px" }}
-            >
-              <LinearProgress sx={{ width: "120px", height: "7px" }} />
-            </Box>
-          ) : (
-            ""
-          )}
+          <Box
+            component="div"
+            height={400}
+            sx={{ overflowY: "auto", height: { xs: "350px", md: "400px" } }}
+            ref={messageEl}
+          >
+            {chat?.map((value, index) => (
+              <Box
+                key={index}
+                component="div"
+                mx={5}
+                my={2}
+                py={2}
+                px={1}
+                width={"fit-content"}
+                maxWidth={"70%"}
+                textAlign={value.type === "user" ? "left" : "end"}
+                marginLeft={value.type !== "user" ? "auto" : "40px"}
+                sx={{ boxShadow: 3, borderRadius: "4px" }}
+              >
+                {value.msg}
+              </Box>
+            ))}
+            {loading === true ? (
+              <Box
+                component="div"
+                mx={5}
+                my={2}
+                py={2}
+                px={1}
+                width={"fit-content"}
+                maxWidth={"70%"}
+                textAlign={"end"}
+                marginLeft={"auto"}
+                sx={{ boxShadow: 3, borderRadius: "4px" }}
+              >
+                <LinearProgress sx={{ width: "120px", height: "7px" }} />
+              </Box>
+            ) : (
+              ""
+            )}
+          </Box>
+          <Box component="div">
+            <form onSubmit={handdleSubmit}>
+              <Box component="div" px={2} sx={{ display: "flex", gap: "4px" }}>
+                <Input
+                  type="text"
+                  placeholder="Pregunta algo..."
+                  fullWidth
+                  onChange={handdleInputChange}
+                  value={question}
+                ></Input>
+                <Button type="submit" variant="contained">
+                  Enviar
+                </Button>
+              </Box>
+            </form>
+          </Box>
+          <ModalShared uid={props.id} />
         </Box>
-        <Box component="div">
-          <form onSubmit={handdleSubmit}>
-            <Box component="div" px={2} sx={{ display: "flex", gap: "4px" }}>
-              <Input
-                type="text"
-                placeholder="Pregunta algo..."
-                fullWidth
-                onChange={handdleInputChange}
-                value={question}
-              ></Input>
-              <Button type="submit" variant="contained">
-                Enviar
-              </Button>
-            </Box>
-          </form>
-        </Box>
-        <ModalShared uid={props.id} />
       </Box>
+      <Button
+        variant="outlined"
+        sx={{
+          position: { md: "absolute", xs: "relative" },
+          right: { md: "0px", xs: "inherit" },
+          top: { md: "45px", xs: "inherit" },
+          bottom: { md: "inherit", xs: "inherit" },
+          margin: { xs: "20px 0px" },
+        }}
+        onClick={pushtoHome}
+      >
+        Crear chatbot
+      </Button>
     </Box>
   );
 };

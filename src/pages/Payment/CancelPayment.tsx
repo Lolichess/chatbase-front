@@ -14,14 +14,17 @@ const CancelPayment = () => {
   return (
     <Box component="div">
       <Navbar />
-      <Box component="div" sx={{ width: "600px", margin: "0 auto" }}>
+      <Box
+        component="div"
+        sx={{ width: { md: "600px", xs: "100%" }, margin: "0 auto" }}
+      >
         <ErrorIcon sx={{ fontSize: "80px", color: "#C0392B" }} />
         <Typography variant="h5" sx={{ margin: "20px 0px" }}>
           {" "}
           Algo no ha sido bien, la session de suscripcion ha sido cancelada.
         </Typography>
         <Button variant="contained" onClick={pushToHome}>
-          Click to Pricing
+          Ir a los planes
         </Button>
       </Box>
     </Box>

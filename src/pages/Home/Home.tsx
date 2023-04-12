@@ -109,7 +109,7 @@ const Home = () => {
                 color="primary"
                 onClick={handdleCLick}
               >
-                Upload PDF
+                Subir PDF
                 {user ? (
                   <input
                     type="file"
@@ -166,7 +166,7 @@ const Home = () => {
               }}
             >
               {" "}
-              La WEB solo extraera un maximo de 10 URL{" "}
+              La WEB solo extraera un maximo de 25 URL{" "}
             </Typography>
             <Button
               fullWidth
