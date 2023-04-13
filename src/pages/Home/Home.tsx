@@ -5,6 +5,7 @@ import {
   Box,
   CircularProgress,
   TextField,
+  CssBaseline,
 } from "@mui/material";
 import React, { useState, ChangeEvent, useContext } from "react";
 import { uploadFile, scrapperWeb } from "@/services/services";
@@ -95,6 +96,7 @@ const Home = () => {
 
   return (
     <>
+      <CssBaseline />
       <Navbar />
       {!showPageScrapper ? (
         <Box width={600} sx={{ margin: "0 auto", width: { xs: "100%" } }}>
