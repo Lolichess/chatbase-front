@@ -61,7 +61,7 @@ const tiers = [
     ],
     buttonText: "Comienza ahora",
     buttonVariant: "contained",
-    pricing: "price_1Mt29eEBmXtipPelVd7Z2XiA",
+    pricing: "price_1Mv7qJEBmXtipPelmFClWoaG",
   },
   {
     title: "Servicios",
@@ -97,7 +97,7 @@ function PricingContent() {
       navigate("/login");
     } else {
       const stripe = await loadStripe(
-        "pk_test_51MpU22EBmXtipPelpPCnezqHvWs9qDVZn72zLY01MrD7RXENHiXSpcnjbE3d8VMiIrLVs8qYTfcnomIxVzesi21i00WgcDuGvo"
+        "pk_live_51MpU22EBmXtipPelBCTtQP7k3tn0UMvWoye8Q4DMKRbjSFZQ1GupxmR8NNtprvfCcd8atgrQB8lchF6fbLClsT9200xeddDzmv"
       );
       let response = await createSessionStripe(price_id, user);
 
