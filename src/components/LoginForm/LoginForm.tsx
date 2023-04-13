@@ -33,7 +33,10 @@ const LoginForm = () => {
   };
 
   return (
-    <Box component="div" sx={{ width: "400px", margin: "0 auto" }}>
+    <Box
+      component="div"
+      sx={{ width: { md: "400px", xs: "100%" }, margin: "0 auto" }}
+    >
       <Typography variant="h5">Sign In on ChatPDF</Typography>
       <Box
         component="div"
