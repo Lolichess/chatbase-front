@@ -50,7 +50,7 @@ const ChatForm = (props: any) => {
   const generateListSuggetions = async () => {
     if (user) {
       const DEFAULT_TEMPLATE =
-        "Crea una lista de preguntas sobre el contexto en un formato array de string valido de max size 3";
+        "Crea una lista de preguntas sobre el contexto en un formato array de string de programacion valido de max size 3";
 
       let response = await sendQuestion(DEFAULT_TEMPLATE, props.id, user);
 
