@@ -1,4 +1,11 @@
-import { Box, Input, Button, Typography, LinearProgress } from "@mui/material";
+import {
+  Box,
+  Input,
+  Button,
+  Typography,
+  LinearProgress,
+  Tooltip,
+} from "@mui/material";
 import React, {
   ChangeEvent,
   FormEvent,
@@ -26,6 +33,7 @@ const ChatForm = (props: any) => {
   const [chat, setChat] = useState<ChatSchema[]>();
   const [namefile, setNamefile] = useState("");
   const [loading, setLoading] = useState(SHOW_LOADING);
+  const [list, setList] = useState<string[]>();
 
   const { user } = useContext(SigninContext);
 
@@ -39,6 +47,38 @@ const ChatForm = (props: any) => {
     }
   };
 
+  const generateListSuggetions = async () => {
+    if (user) {
+      const DEFAULT_TEMPLATE =
+        "Crea una lista de preguntas sugeridas en un formato array de string de max size 3";
+
+      let response = await sendQuestion(DEFAULT_TEMPLATE, props.id, user);
+
+      if (response) {
+        try {
+          setList(JSON.parse(response.response));
+        } catch (e) {}
+      }
+    }
+  };
+
+  const pushSuggetions = async (question: string) => {
+    setChat([...(chat || []), { msg: question, type: "user" }]);
+
+    let questionSend = question;
+    setQuestion("");
+    setLoading(!SHOW_LOADING);
+    let response = await sendQuestion(questionSend, props.id, user);
+
+    if (response) {
+      setChat((prev) => [
+        ...(prev || []),
+        { msg: response.response, type: "system" },
+      ]);
+      setLoading(SHOW_LOADING);
+    }
+  };
+
   useEffect(() => {
     if (messageEl) {
       messageEl.current.addEventListener("DOMNodeInserted", (event: any) => {
@@ -49,6 +89,7 @@ const ChatForm = (props: any) => {
   }, []);
 
   useEffect(() => {
+    generateListSuggetions();
     fecthdata();
   }, [user]);
 
@@ -172,6 +213,42 @@ const ChatForm = (props: any) => {
                 <Button type="submit" variant="contained">
                   Enviar
                 </Button>
+              </Box>
+              <Box
+                component="div"
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  flexWrap: "wrap",
+                }}
+              >
+                {list?.map((value, index) => (
+                  <Box
+                    component="div"
+                    key={value}
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      padding: "10px 20px",
+                      cursor: "pointer",
+                      margin: "10px",
+                    }}
+                    onClick={() => pushSuggetions(value)}
+                  >
+                    <Tooltip title={value} placement="top">
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          width: "180px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {value}
+                      </Typography>
+                    </Tooltip>
+                  </Box>
+                ))}
               </Box>
             </form>
           </Box>
