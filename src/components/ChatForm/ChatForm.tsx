@@ -56,7 +56,11 @@ const ChatForm = (props: any) => {
 
       if (response) {
         try {
-          setList(JSON.parse(response.response));
+          const decoder = new TextDecoder("iso-8859-1");
+          const decodedText = decoder.decode(
+            new Uint8Array([...response.response].map((c) => c.charCodeAt(0)))
+          );
+          setList(JSON.parse(decodedText));
         } catch (e) {}
       }
     }
