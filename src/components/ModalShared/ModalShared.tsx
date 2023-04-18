@@ -6,6 +6,7 @@ import {
   TextareaAutosize,
   Snackbar,
   AlertProps,
+  Tooltip,
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import ShareIcon from "@mui/icons-material/Share";
@@ -15,6 +16,7 @@ import copy from "copy-to-clipboard";
 import { useNavigate } from "react-router-dom";
 import { AlertModal } from "../AlertModal";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CodeIcon from "@mui/icons-material/Code";
 import { SigninContext } from "@/context";
 import { getUser, removeChatbot } from "@/services/services";
 
@@ -138,9 +140,15 @@ const ModalShared = (props: any) => {
         gap: "12px",
       }}
     >
-      <SettingsIcon onClick={pushtoSetting} sx={{ cursor: "pointer" }} />
-      <ShareIcon onClick={openRestriction} sx={{ cursor: "pointer" }} />
-      <DeleteIcon onClick={handleOpenRemove} sx={{ cursor: "pointer" }} />
+      <Tooltip title={"Configuración"} placement="top">
+        <SettingsIcon onClick={pushtoSetting} sx={{ cursor: "pointer" }} />
+      </Tooltip>
+      <Tooltip title={"Compartir"} placement="top">
+        <CodeIcon onClick={openRestriction} sx={{ cursor: "pointer" }} />
+      </Tooltip>
+      <Tooltip title={"Eliminar"} placement="top">
+        <DeleteIcon onClick={handleOpenRemove} sx={{ cursor: "pointer" }} />
+      </Tooltip>
       <Modal
         open={open}
         onClose={handleClose}

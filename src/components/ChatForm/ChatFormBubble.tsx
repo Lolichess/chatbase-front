@@ -21,6 +21,7 @@ const ChatFormBubble = (props: any) => {
   const [question, setQuestion] = useState("");
   const [chat, setChat] = useState<ChatSchema[]>();
   const [loading, setLoading] = useState(SHOW_LOADING);
+  const [customPrompt, setCustomPrompt] = useState("");
 
   useEffect(() => {
     if (messageEl) {
@@ -43,6 +44,7 @@ const ChatFormBubble = (props: any) => {
 
   const fecthdata = async () => {
     let response = await getInfoShared(props.id);
+    setCustomPrompt(response.template_prompt);
     setChat([...(chat || []), { msg: response.msgWelcome, type: "system" }]);
   };
 
@@ -56,7 +58,11 @@ const ChatFormBubble = (props: any) => {
     let questionSend = question;
     setQuestion("");
     setLoading(!SHOW_LOADING);
-    let response = await sendQuestionShared(questionSend, props.id);
+    let response = await sendQuestionShared(
+      questionSend,
+      props.id,
+      customPrompt
+    );
 
     if (response) {
       setChat((prev) => [

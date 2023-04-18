@@ -37,13 +37,18 @@ const scrapperWeb = async (url: String, user: any) => {
 
 /* Upload  */
 
-const sendQuestionShared = async (prompt: String, urlID: Number) => {
+const sendQuestionShared = async (
+  prompt: String,
+  urlID: Number,
+  customPrompt: string
+) => {
   let requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       promptQuery: prompt,
       uid: urlID,
+      promptTemplate: customPrompt,
     }),
   };
   1;
@@ -55,7 +60,12 @@ const sendQuestionShared = async (prompt: String, urlID: Number) => {
   return await response.json();
 };
 
-const sendQuestion = async (prompt: String, urlID: Number, user: any) => {
+const sendQuestion = async (
+  prompt: String,
+  urlID: Number,
+  user: any,
+  customPrompt: string
+) => {
   let requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -63,6 +73,7 @@ const sendQuestion = async (prompt: String, urlID: Number, user: any) => {
       promptQuery: prompt,
       uid: urlID,
       user: user,
+      promptTemplate: customPrompt,
     }),
   };
 

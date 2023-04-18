@@ -4,6 +4,7 @@ import { Box, Button, Input, Typography, TextField, Link } from "@mui/material";
 import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertModal } from "../AlertModal";
+import { CollectionsBookmarkOutlined } from "@mui/icons-material";
 
 const Settings = (props: any) => {
   const [msgInitial, setMsginitial] = useState("");
@@ -11,6 +12,7 @@ const Settings = (props: any) => {
   const [name, setName] = useState("");
   const [openAlert, setopenAlert] = useState(false);
   const [error, setError] = useState(false);
+  const [questions, setQuestions] = useState(["", "", ""]);
 
   const navigate = useNavigate();
 
@@ -23,11 +25,22 @@ const Settings = (props: any) => {
         setMsginitial(response.msgWelcome);
         setName(response.name);
         setPrompt(response.template_prompt);
+        if (response.questions) {
+          setQuestions(response.questions);
+        }
       } catch (error) {
         setopenAlert(true);
         setError(true);
       }
     }
+  };
+
+  const changeQuestions = (index: any, question: string) => {
+    let question_list = questions;
+
+    question_list[index] = question;
+
+    setQuestions(() => [...question_list]);
   };
 
   const handdleSubmit = async (e: FormEvent) => {
@@ -37,6 +50,7 @@ const Settings = (props: any) => {
       prompt: prompt,
       msgWelcome: msgInitial,
       uid: props.uid,
+      questions: questions,
     };
     try {
       let response = await sendData(data, user);
@@ -103,7 +117,7 @@ const Settings = (props: any) => {
             fullWidth
             onChange={(e) => setMsginitial(e.target.value)}
           />
-          {/*
+
           <Typography variant="h6" align="left">
             Template prompt
           </Typography>
@@ -117,7 +131,23 @@ const Settings = (props: any) => {
             multiline
             rows={6}
             maxRows={6}
-      />*/}
+          />
+          {questions.map((item, index) => (
+            <>
+              <Typography align="left" variant="h6">
+                Question {index + 1}
+              </Typography>
+              <TextField
+                variant="outlined"
+                type="text"
+                value={item}
+                sx={{ margin: "10px 0px" }}
+                fullWidth
+                onChange={(e) => changeQuestions(index, e.target.value)}
+              />
+            </>
+          ))}
+
           <Button variant="contained" type="submit" fullWidth>
             {" "}
             Save

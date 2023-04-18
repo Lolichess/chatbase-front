@@ -34,6 +34,7 @@ const ChatForm = (props: any) => {
   const [namefile, setNamefile] = useState("");
   const [loading, setLoading] = useState(SHOW_LOADING);
   const [list, setList] = useState<string[]>();
+  const [customPrompt, setCustomPrompt] = useState("");
 
   const { user } = useContext(SigninContext);
 
@@ -43,7 +44,14 @@ const ChatForm = (props: any) => {
     if (user) {
       let response = await getInfo(props.id, user);
       setNamefile(response.name);
+      setCustomPrompt(response.template_prompt);
       setChat([...(chat || []), { msg: response.msgWelcome, type: "system" }]);
+      console.log(response.questions);
+      if (response.questions) {
+        setList(response.questions);
+      } else {
+        generateListSuggetions();
+      }
     }
   };
 
@@ -52,7 +60,7 @@ const ChatForm = (props: any) => {
       const DEFAULT_TEMPLATE =
         "Crea una lista de preguntas sobre el contexto en un formato array de string de programacion valido de max size 3";
 
-      let response = await sendQuestion(DEFAULT_TEMPLATE, props.id, user);
+      let response = await sendQuestion(DEFAULT_TEMPLATE, props.id, user, "");
 
       if (response) {
         try {
@@ -68,7 +76,12 @@ const ChatForm = (props: any) => {
     let questionSend = question;
     setQuestion("");
     setLoading(!SHOW_LOADING);
-    let response = await sendQuestion(questionSend, props.id, user);
+    let response = await sendQuestion(
+      questionSend,
+      props.id,
+      user,
+      customPrompt
+    );
 
     if (response) {
       setChat((prev) => [
@@ -89,7 +102,6 @@ const ChatForm = (props: any) => {
   }, []);
 
   useEffect(() => {
-    generateListSuggetions();
     fecthdata();
   }, [user]);
 
@@ -112,7 +124,12 @@ const ChatForm = (props: any) => {
     let questionSend = question;
     setQuestion("");
     setLoading(!SHOW_LOADING);
-    let response = await sendQuestion(questionSend, props.id, user);
+    let response = await sendQuestion(
+      questionSend,
+      props.id,
+      user,
+      customPrompt
+    );
 
     if (response) {
       setChat((prev) => [
@@ -155,7 +172,8 @@ const ChatForm = (props: any) => {
             borderRadius: "10px",
             position: "relative",
             width: { xs: "90%", md: "800px" },
-            height: { xs: "450px", md: "500px" },
+            height: { xs: "auto", md: "500px" },
+            minHeight: { xs: "450px" },
           }}
         >
           <Box
@@ -217,38 +235,42 @@ const ChatForm = (props: any) => {
               <Box
                 component="div"
                 sx={{
-                  display: { xs: "none", md: "flex" },
+                  display: { md: "flex" },
                   flexWrap: "wrap",
                 }}
               >
-                {list?.map((value, index) => (
-                  <Box
-                    component="div"
-                    key={value}
-                    sx={{
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      padding: "10px 20px",
-                      cursor: "pointer",
-                      margin: "10px",
-                    }}
-                    onClick={() => pushSuggetions(value)}
-                  >
-                    <Tooltip title={value} placement="top">
-                      <Typography
-                        sx={{
-                          fontSize: "11px",
-                          width: "180px",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {value}
-                      </Typography>
-                    </Tooltip>
-                  </Box>
-                ))}
+                {list?.map((value, index) =>
+                  value !== "" ? (
+                    <Box
+                      component="div"
+                      key={value}
+                      sx={{
+                        border: "1px solid #ccc",
+                        borderRadius: "10px",
+                        padding: "10px 20px",
+                        cursor: "pointer",
+                        margin: "10px",
+                      }}
+                      onClick={() => pushSuggetions(value)}
+                    >
+                      <Tooltip title={value} placement="top">
+                        <Typography
+                          sx={{
+                            fontSize: "11px",
+                            width: "180px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {value}
+                        </Typography>
+                      </Tooltip>
+                    </Box>
+                  ) : (
+                    ""
+                  )
+                )}
               </Box>
             </form>
           </Box>
