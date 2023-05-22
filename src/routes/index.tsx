@@ -9,6 +9,7 @@ import { MyChatbots } from "@/pages/MyChatbots";
 import PricingPage from "@/pages/PricingPage/PricingPage";
 import SucessPayment from "@/pages/Payment/SucessPayment";
 import CancelPayment from "@/pages/Payment/CancelPayment";
+import ChatbotAdd from "@/pages/Chatbot/ChatbotAdd";
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/shared/chatbot/:uid" element={<ChatbotShared />} />
         <Route path="/shared-bubble/chatbot/:uid" element={<ChatbotBubble />} />
         <Route path="/chatbot/:uid/settings" element={<ChatbotSettings />} />
+        <Route path="/chatbot/:uid/add" element={<ChatbotAdd />} />
         <Route path="/login" element={<Login />} />
         <Route path="/settings" element={<AccountSetting />} />
         <Route path="/my-chatbots" element={<MyChatbots />} />

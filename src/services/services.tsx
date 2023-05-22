@@ -17,6 +17,26 @@ const uploadFile = async (file: FileList, user: any) => {
   return await response.json();
 };
 
+/* Upload file to API */
+const uploadFileRetrain = async (file: FileList, user: any, chatID: any) => {
+  const data = new FormData();
+  data.append("file", file[0]);
+  data.append("userdata", user);
+  data.append("chatID", chatID);
+
+  let requestOptions = {
+    method: "POST",
+    body: data,
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/uploadfile-retrain",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 const scrapperWeb = async (url: String, user: any) => {
   let requestOptions = {
     method: "POST",
@@ -132,6 +152,21 @@ const getInfoShared = async (urlID: Number) => {
   return await response.json();
 };
 
+const getFilesUploaded = async (chatbotID: any, user: any) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chatbotID: chatbotID, user: user }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/getinfofiles",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 const getListChat = async (user: any) => {
   let requestOptions = {
     method: "POST",
@@ -213,6 +248,31 @@ const getUser = async (user: any) => {
   return await response.json();
 };
 
+const removeFile = async (
+  user: any,
+  chatbotID: any,
+  filename: any,
+  id: any
+) => {
+  let requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user: user,
+      chatbotID: chatbotID,
+      filename: filename,
+      idfile: id,
+    }),
+  };
+
+  let response = await fetch(
+    import.meta.env.VITE_API_URL + "/remove-file",
+    requestOptions
+  );
+
+  return await response.json();
+};
+
 export {
   uploadFile,
   sendQuestion,
@@ -226,4 +286,7 @@ export {
   loginUser,
   removeChatbot,
   getUser,
+  getFilesUploaded,
+  uploadFileRetrain,
+  removeFile,
 };

@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { AlertModal } from "../AlertModal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CodeIcon from "@mui/icons-material/Code";
+import AddIcon from "@mui/icons-material/Add";
 import { SigninContext } from "@/context";
 import { getUser, removeChatbot } from "@/services/services";
 
@@ -110,6 +111,10 @@ const ModalShared = (props: any) => {
     }
   };
 
+  const handleAddNewDocument = () => {
+    navigate("/chatbot/" + props.uid + "/add");
+  };
+
   useEffect(() => {
     if (user) {
       getUserPrivilgios();
@@ -148,6 +153,9 @@ const ModalShared = (props: any) => {
       </Tooltip>
       <Tooltip title={"Eliminar"} placement="top">
         <DeleteIcon onClick={handleOpenRemove} sx={{ cursor: "pointer" }} />
+      </Tooltip>
+      <Tooltip title={"Agregar"} placement="top">
+        <AddIcon onClick={handleAddNewDocument} sx={{ cursor: "pointer" }} />
       </Tooltip>
       <Modal
         open={open}
